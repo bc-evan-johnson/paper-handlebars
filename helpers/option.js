@@ -1,7 +1,7 @@
 'use strict';
 
 const util = require('handlebars-utils');
-const { getValue } = require('./lib/common');
+const { getValue, unwrapIfSafeString } = require('./lib/common');
 
 /**
  * Based on https://github.com/helpers/handlebars-helpers/blob/0.9.0/lib/misc.js#L26-L28
@@ -9,7 +9,7 @@ const { getValue } = require('./lib/common');
  * Get a value from the options object. Property paths (`a.b.c`) may be used
  * to get nested properties.
  */
-const factory = () => {
+const factory = (globals) => {
     return function (path, locals) {
         // preserve `option` behavior with missing args while ensuring the correct
         // options object is used
@@ -20,6 +20,7 @@ const factory = () => {
         if (arguments.length < 2) {
             path = '';
         }
+        path = unwrapIfSafeString(globals.handlebars, path);
 
         let opts = util.options(this, locals, options);
 

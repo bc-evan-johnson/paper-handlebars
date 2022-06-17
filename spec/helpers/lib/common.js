@@ -21,6 +21,7 @@ describe('common utils', function () {
             b: [2, 3, 5, 7, 11, 13, 17, 19],
             c: 3,
             d: false,
+            '42': 42,
         };
         obj.__proto__ = {x: 'yz'};
 
@@ -47,9 +48,10 @@ describe('common utils', function () {
             done();
         });
 
-        it('should return the whole object if path is not a string or array', (done) => {
-            expect(getValue(obj, {})).to.equal(obj);
-            expect(getValue(obj)).to.equal(obj);
+        it('should return obj[String(path)] or undefined if path is not a string or array', (done) => {
+            expect(getValue(obj, {})).to.equal(undefined);
+            expect(getValue(obj)).to.equal(undefined);
+            expect(getValue(obj, 42)).to.equal(42);
             done();
         });
 
